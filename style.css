@@ -1,0 +1,252 @@
+@import url("https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+
+:root {
+  --main-color: #2b2b2b;
+  --sub-color: lightgrey;
+  --accent-color: #4b9eeb;
+}
+
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  margin: 0;
+  font-family: "Roboto Mono", monospace;
+}
+
+body {
+  background-color: var(--main-color);
+  color: #fff;
+  text-align: center;
+}
+
+body.dialog-open {
+  overflow: hidden;
+}
+
+main {
+  padding: 40px;
+  background-color: lightgrey;
+  margin: auto;
+  max-width: 1440px;
+  border-radius: 80px 80px 0 0;
+}
+
+.logo {
+  -webkit-filter: invert(1);
+  filter: invert(1);
+  width: 80px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 0 8%;
+  max-width: 1440px;
+  margin: 40px auto;
+}
+
+h2 {
+  font-size: clamp(0.8rem, calc(0.727rem + 0.455vw), 1rem);
+  margin-bottom: 10px;
+}
+
+.dialog_inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  flex-direction: row-reverse;
+  padding: 30px;
+  justify-content: space-between;
+}
+
+.pkmn_card_dialog_content h2 {
+  font-size: 30px;
+  text-align: left;
+}
+
+.stat {
+  background-color: #fff;
+  color: #000;
+  margin: 8px 0;
+  padding: 4px 8px;
+  border-radius: 20px;
+  width: fit-content;
+  text-align: center;
+}
+
+#search_input {
+  padding: 15px 30px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  margin-left: auto;
+}
+
+#search_input_mobile {
+  display: none;
+}
+
+input::placeholder {
+  font-weight: bold;
+  opacity: 0.8;
+  color: #fff;
+}
+
+h1 {
+  font-size: 60px;
+  font-weight: 900;
+  font-style: normal;
+  margin: 15px 30px;
+}
+
+.pkmn_card {
+  background-color: var(--sub-color);
+  color: #fff;
+  padding: 30px;
+  margin: 10px;
+  border-radius: 20px;
+  transition: all 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.types span {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+.pkmn_card:hover,
+.load_button:hover {
+  background-color: darkgray;
+}
+
+button {
+  background: none;
+  border: none;
+}
+
+.load_button {
+  background: #ff3d00;
+  color: #fff;
+  padding: 20px;
+  margin: 40px 0;
+  border-radius: 20px;
+  transition: all 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.pkmn_img {
+  width: clamp(50px, calc(31.818px + 5.682vw), 150px);
+  height: auto;
+  margin: 0 0 20px 0;
+}
+
+.pkmn_img_dialog {
+  width: 150px;
+  height: auto;
+}
+.d_none{
+  display: none;
+}
+
+dialog {
+  margin: auto auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  background-image: url("./assets/icons/pokeball.png");
+  background-size: 300px;
+  background-repeat: no-repeat;
+  background-position: center right -60px;
+}
+
+.close_button {
+  display: flex;
+  transition: all 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+  width: 30px;
+}
+
+.close_button:hover,
+.arrow_pkmn:hover {
+  filter: drop-shadow(16px 16px 20px red) invert(75%);
+}
+
+.pkmn_card_dialog {
+  margin: auto auto;
+}
+.arrows {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.arrow_pkmn {
+  width: 40px;
+  color: #fff;
+  transition: all 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin: 20px 0px;
+}
+
+.arrow_pkmn:hover {
+  color: darkgray;
+}
+
+.loader {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  display: inline-block;
+  border-top: 9px solid #fff;
+  border-right: 9px solid transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 1080px) {
+  #search_input {
+    display: none;
+  }
+  #search_input_mobile {
+    display: inherit;
+    padding: 15px 30px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #000;
+    border: none;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+  }
+
+
+
+  input::placeholder {
+    font-weight: bold;
+    opacity: 0.5;
+    color: #fff;
+    text-align: center;
+  }
+
+  header {
+    flex-direction: column;
+  }
+
+  .dialog_inner {
+    flex-direction: column;
+  }
+}

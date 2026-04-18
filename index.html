@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style/colors.css">
+    <link rel="icon" type="image/x-icon" href="./assets/icons/pokeball.png">
+</head>
+<body onload="fetchDataJson()">
+    <header>
+        <img src="./assets/icons/pokeball.png" class="logo">
+        <h1>Kanto Pokedex</h1>
+        <input type="search" id="search_input" placeholder="Search Pokemon" oninput="filterByName(event)">
+    </header>
+
+    <main>
+
+        <div id="content">
+            <span class="loader hidden" id="spinner"></span>
+        </div>
+        <dialog id="dialog_wrapper" aria-haspopup="dialog" aria-control="Image Dialog">
+            <section id="dialog_content">   </section>
+        </dialog>
+
+<button id="load" class="load_button" onclick="loadMore()">Load More...</button>
+    </main>
+   
+    <footer>
+ 
+    <input type="search" id="search_input_mobile" placeholder="Search Pokemon" oninput="filterByName(event)">
+    </footer>
+    <script src="./script.js"></script>
+    <script src="./scripts/templates.js"></script>
+</body>
+</html>
