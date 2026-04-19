@@ -13,10 +13,10 @@ async function fetchDataJson() {
   );
   PokeData = await response.json();
   spinner.classList.add("hidden");
-  renderCategory();
+  renderPkmn();
 }
 
-async function renderCategory() {
+async function renderPkmn() {
   let contentRef = document.getElementById("content");
   contentRef.innerHTML = "";
 
