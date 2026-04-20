@@ -117,9 +117,10 @@ h1 {
   text-align: left;
 }
 
-.pkmn_card_dialog_content .types  {
-display: flex;
-gap: 10px;
+.pkmn_card_dialog_content .types {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
 }
 
 .pkmn_card_dialog_content .types span {
@@ -256,5 +257,12 @@ dialog {
 
   .dialog_inner {
     flex-direction: column;
+  }
+
+  .types {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
   }
 }

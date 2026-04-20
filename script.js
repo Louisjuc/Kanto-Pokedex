@@ -2,11 +2,13 @@ let PokeData = [];
 let ActualIndex = 0;
 let spinner = document.getElementById("spinner");
 let typesCache = {};
+const dialog = document.querySelector("dialog"); 
+dialog.addEventListener("click", onClick); 
 
 function getImg(index) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-viii/icons/${index}.png`;
 }
-async function fetchDataJson() {
+async function init() {
   spinner.classList.remove("hidden");
   let response = await fetch(
     "https://pokeapi.co/api/v2/pokemon?limit=151&offset=0"
@@ -21,18 +23,15 @@ async function renderPkmn() {
   contentRef.innerHTML = "";
 
   let promises = [];
-
   for (let index = 0; index < 20; index++) {
     let name = PokeData.results[index].name;
     promises.push(getTypes(name));
   }
 
   let allTypes = await Promise.all(promises);
-
   for (let index = 0; index < 20; index++) {
     contentRef.innerHTML += getPokemonTemplate(index, allTypes[index]);
   }
-
   ActualIndex = 20;
 }
 
@@ -43,7 +42,6 @@ async function getTypes(name) {
 
   let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
   let data = await response.json();
-
   let types = data.types.map((p) => p.type.name);
   typesCache[name] = types;
   return types;
@@ -64,18 +62,23 @@ function closeDialog() {
   document.getElementById("dialog_wrapper").close();
   document.body.classList.remove("dialog-open");
 }
+
 function filterByName(event) {
   let searchTerm = event.target.value.trim().toLowerCase();
   let listItems = document.querySelectorAll(".dialog_button");
-
+  let found = false;
   listItems.forEach(function (item) {
-    let text = item.innerText.toLowerCase(); 
+    let text = item.innerText.toLowerCase();
     if (text.includes(searchTerm)) {
-      item.style.display = ""; 
+      item.style.display = "";
+      found = true;
     } else {
-      item.style.display = "none"; 
+      item.style.display = "none";
     }
   });
+  if (!found) {
+    alert("Cannot find Pokemon!");
+  }
 }
 
 function nextPkmn() {
@@ -89,39 +92,36 @@ function prevPkmn() {
 }
 
 async function loadMore() {
-  
   let contentRef = document.getElementById("content");
-
   disableButton();
-
   let promises = [];
   let end = Math.min(ActualIndex + 20, PokeData.results.length);
-
   for (let index = ActualIndex; index < end; index++) {
-    let name = PokeData.results[index].name;
-    promises.push(getTypes(name));
+    promises.push(getTypes(PokeData.results[index].name));
   }
-
   let allTypes = await Promise.all(promises);
-
   for (let index = 0; index < allTypes.length; index++) {
     contentRef.innerHTML += getPokemonTemplate(
-      ActualIndex + index,
-      allTypes[index]
+      ActualIndex + index, allTypes[index]
     );
   }
-
   ActualIndex = end;
-  
 }
 
-function disableButton(){
-
+function disableButton() {
   let button = document.getElementById("load");
   if (ActualIndex >= 140) {
     button.disabled = true;
     button.classList.add("d_none");
-    
+
     return;
   }
 }
+
+function onClick(event) {
+  if (event.target === dialog) {
+    dialog.close();
+  }
+}
+
+
