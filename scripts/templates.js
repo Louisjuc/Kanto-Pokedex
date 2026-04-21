@@ -25,7 +25,7 @@ async function contentDialog(index) {
   let stats = data.stats;
 
   let name = data.name;
-  let types = typesCache[name];
+  let types = data.types.map(t => t.type.name);
 
   let dialogContent = document.getElementById("dialog_content");
   dialogContent.innerHTML = `
