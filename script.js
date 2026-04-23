@@ -8,10 +8,6 @@ let contentRef = document.getElementById("content");
 const dialog = document.querySelector("dialog"); 
 dialog.addEventListener("click", onClick); 
 
-function getImg(index) {
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-viii/icons/${index}.png`;
-}
-
 async function init() {
   spinner.classList.remove("hidden");
   let response = await fetch(
@@ -51,9 +47,9 @@ async function getTypes(name) {
   return types;
 }
 
-function FirstLetter(name) {
-  return name.charAt(0).toUpperCase() + name.slice(1);
-}
+
+
+
 
 function fullSize(index) {
   ActualIndex = index;
@@ -67,41 +63,37 @@ function closeDialog() {
   document.body.classList.remove("dialog-open");
 }
 function filterByName(event) {
+  button.classList.remove("d_none");
   document.getElementById("no_Result")?.remove();
+
   let searchTerm = event.target.value.trim().toLowerCase();
   let listItems = document.querySelectorAll(".dialog_button");
-  let found = false;
 
   if (searchTerm.length < 3) {
     listItems.forEach(item => item.style.display = "");
-    document.getElementById("noResult")?.remove();
     return;
   }
 
+  filterItems(listItems, searchTerm);
+}
+
+function filterItems(listItems, searchTerm) {
+  let found = false;
   listItems.forEach(item => {
     let text = item.innerText.toLowerCase();
-
     if (text.includes(searchTerm)) {
       item.style.display = "";
       found = true;
     } else {
       item.style.display = "none";
-    }
-  });
-
-  let contentRef = document.getElementById("content");
-  if (found) {
+    }}); if (found) {
     document.getElementById("no_Result")?.remove();
-  }
-
-  // 👉 bleibt fast wie bei dir, nur mit ID
-  if (!found && !document.getElementById("noResult")) {
-    contentRef.insertAdjacentHTML(
-      "beforeend",
-      `<p id="no_Result">Couldn't find any Pokémon.</p>`
-    );
-  }
+  } else if (!document.getElementById("no_Result")) {
+    button.classList.add("d_none");
+    contentRef.insertAdjacentHTML("beforeend",`<p id="no_Result">Couldn't find any Pokémon.</p>`
+    );}
 }
+
 
 function nextPkmn() {
     ActualIndex++;
@@ -162,6 +154,21 @@ async function getPokemonData(index) {
   let response = await fetch(url);
   let data = await response.json();
   return data;
+}
+
+function FirstLetter(name) {
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+async function fetchDetails(index){
+  let data = await getPokemonData(index);
+
+  return {
+    data,
+    stats: data.stats,
+    name: data.name,
+    types: data.types.map(t => t.type.name)
+  };
 }
 
 
