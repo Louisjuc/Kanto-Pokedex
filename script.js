@@ -3,10 +3,10 @@ let ActualIndex = 0;
 let loadedIndex = 0;
 let spinner = document.getElementById("spinner");
 let typesCache = {};
-let button = document.getElementById("load"); //load button
+let button = document.getElementById("load");
 let contentRef = document.getElementById("content");
-const dialog = document.querySelector("dialog"); 
-dialog.addEventListener("click", onClick); 
+const dialog = document.querySelector("dialog");
+dialog.addEventListener("click", onClick);
 
 async function init() {
   spinner.classList.remove("hidden");
@@ -19,7 +19,6 @@ async function init() {
 }
 
 async function renderPkmn() {
-
   contentRef.innerHTML = "";
 
   let promises = [];
@@ -47,10 +46,6 @@ async function getTypes(name) {
   return types;
 }
 
-
-
-
-
 function fullSize(index) {
   ActualIndex = index;
   contentDialog(index);
@@ -62,6 +57,7 @@ function closeDialog() {
   document.getElementById("dialog_wrapper").close();
   document.body.classList.remove("dialog-open");
 }
+
 function filterByName(event) {
   button.classList.remove("d_none");
   document.getElementById("no_Result")?.remove();
@@ -70,34 +66,37 @@ function filterByName(event) {
   let listItems = document.querySelectorAll(".dialog_button");
 
   if (searchTerm.length < 3) {
-    listItems.forEach(item => item.style.display = "");
+    listItems.forEach((item) => (item.style.display = ""));
     return;
   }
-
   filterItems(listItems, searchTerm);
 }
 
 function filterItems(listItems, searchTerm) {
   let found = false;
-  listItems.forEach(item => {
+  listItems.forEach((item) => {
     let text = item.innerText.toLowerCase();
     if (text.includes(searchTerm)) {
       item.style.display = "";
       found = true;
     } else {
       item.style.display = "none";
-    }}); if (found) {
+    }
+  });
+  if (found) {
     document.getElementById("no_Result")?.remove();
   } else if (!document.getElementById("no_Result")) {
     button.classList.add("d_none");
-    contentRef.insertAdjacentHTML("beforeend",`<p id="no_Result">Couldn't find any Pokémon.</p>`
-    );}
+    contentRef.insertAdjacentHTML(
+      "beforeend",
+      `<p id="no_Result">Couldn't find any Pokémon.</p>`
+    );
+  }
 }
 
-
 function nextPkmn() {
-    ActualIndex++;
-  
+  ActualIndex++;
+
   contentDialog(ActualIndex);
 }
 
@@ -119,15 +118,14 @@ async function loadMore() {
   let allTypes = await Promise.all(promises);
   for (let index = 0; index < allTypes.length; index++) {
     contentRef.innerHTML += getPokemonTemplate(
-      loadedIndex + index, allTypes[index]
+      loadedIndex + index,
+      allTypes[index]
     );
   }
   loadedIndex = end;
-
 }
 
 function disableButton() {
- 
   if (loadedIndex >= 140) {
     button.disabled = true;
     button.classList.add("d_none");
@@ -141,7 +139,6 @@ function onClick(event) {
     dialog.close();
   }
 }
-
 
 document.addEventListener("keydown", (esc) => {
   if (esc.key === "Escape") {
@@ -160,16 +157,13 @@ function FirstLetter(name) {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
-async function fetchDetails(index){
+async function fetchDetails(index) {
   let data = await getPokemonData(index);
 
   return {
     data,
     stats: data.stats,
     name: data.name,
-    types: data.types.map(t => t.type.name)
+    types: data.types.map((t) => t.type.name),
   };
 }
-
-
-
