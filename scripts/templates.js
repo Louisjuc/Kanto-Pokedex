@@ -11,7 +11,7 @@ function getPokemonTemplate(index, types) {
     <button class="dialog_button" onclick="fullSize(${index})">
     <div class="pkmn_card ${types[0]}">
     <h2> ${FirstLetter(PokeData.results[index].name)}</h2>
-    <img src="${getImg(index + 1)}" class="pkmn_img" alt="Picture of the Pokemon">
+    <img src="${getImg(index + 1)}" class="pkmn_img" alt="Picture of ${FirstLetter(PokeData.results[index].name)}">
     <div class="types">
     ${types.map((type) => `<span>${FirstLetter(type)}</span>`).join(" ")}
   </div>
@@ -21,8 +21,7 @@ function getPokemonTemplate(index, types) {
 }
 
 function contentDialog(index, result) {
-  let dialogContent = document.getElementById("dialog_content");
-  dialogContent.innerHTML = `
+  return`
   <section class="pkmn_card_dialog">
     <img src="./assets/icons/cancel.svg" class="close_button" onclick="closeDialog(${index})">
     <div class="pkmn_card_dialog_content">
@@ -31,10 +30,10 @@ function contentDialog(index, result) {
           <img src="${getImg(index + 1)}" class="pkmn_img_dialog">
           <div class="arrows">
             <button onclick="prevPkmn()">
-              <img src="./assets/icons/left.svg" class="arrow_pkmn">
+              <img src="./assets/icons/left.svg" class="arrow_pkmn" id="left_arrow">
             </button>
             <button onclick="nextPkmn()">
-              <img src="./assets/icons/right.svg" class="arrow_pkmn">
+              <img src="./assets/icons/right.svg" class="arrow_pkmn" id="right_arrow">
             </button>
           </div>
         </section>

@@ -63,7 +63,9 @@ async function fullSize(index) {
   document.body.classList.add("dialog-open");
   let result = await fetchDetails(index);
   currentPokemon = result;
-  contentDialog(index, currentPokemon);
+  let dialogContent = document.getElementById("dialog_content");
+  dialogContent.innerHTML = contentDialog(index, currentPokemon);
+  updateArrows();
 }
 
 function closeDialog() {
@@ -116,10 +118,15 @@ function filterItems(listItems, searchTerm) {
 }
 
 async function nextPkmn() {
-  ActualIndex++;
-  let result = await fetchDetails(ActualIndex);
-  currentPokemon = result;
-  contentDialog(ActualIndex, currentPokemon);
+  if (ActualIndex < loadedIndex - 1) {
+    ActualIndex++;
+    let result = await fetchDetails(ActualIndex);
+    currentPokemon = result;
+    let dialogContent = document.getElementById("dialog_content");
+    dialogContent.innerHTML = contentDialog(ActualIndex, currentPokemon);
+  }
+
+  updateArrows();
 }
 
 async function prevPkmn() {
@@ -127,7 +134,26 @@ async function prevPkmn() {
     ActualIndex--;
     let result = await fetchDetails(ActualIndex);
     currentPokemon = result;
-    contentDialog(ActualIndex, currentPokemon);
+    let dialogContent = document.getElementById("dialog_content");
+    dialogContent.innerHTML = contentDialog(ActualIndex, currentPokemon);
+  }
+  updateArrows();
+}
+
+function updateArrows() {
+  let left = document.getElementById('left_arrow');
+  let right = document.getElementById('right_arrow');
+
+  if (ActualIndex === 0) {
+    left.classList.add("d_none");
+  } else {
+    left.classList.remove("d_none");
+  }
+
+  if (ActualIndex >= loadedIndex - 1) {
+    right.classList.add("d_none");
+  } else {
+    right.classList.remove("d_none");
   }
 }
 

@@ -18,6 +18,9 @@ body {
   background-color: var(--main-color);
   color: #fff;
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .dialog-open {
@@ -34,13 +37,13 @@ body {
 }
 
 main {
-  padding: 40px;
-  background-color: lightgrey;
   margin: auto;
   max-width: 1440px;
+  padding: 80px;
   border-radius: 80px 80px 0 0;
-  min-height: 100vh;
- 
+  background-color: lightgray;
+  flex: 1;
+  min-height: 0;
 }
 
 .logo {
@@ -269,9 +272,6 @@ width: auto;
     text-align: center;
   }
 
-  header {
-    flex-direction: column;
-  }
 
   .dialog_inner {
     flex-direction: column;
