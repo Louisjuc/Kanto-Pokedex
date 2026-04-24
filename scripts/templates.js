@@ -2,6 +2,10 @@ function getImg(index) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-viii/icons/${index}.png`;
 }
 
+function notFoundMessage(){
+  contentRef.insertAdjacentHTML("beforeend",`<p id="no_Result">Couldn't find any Pokémon.</p>` );
+}
+
 function getPokemonTemplate(index, types) {
   return `
     <button class="dialog_button" onclick="fullSize(${index})">
@@ -15,9 +19,8 @@ function getPokemonTemplate(index, types) {
     </button>
     `;
 }
-async function contentDialog(index) {
-  let result = await fetchDetails(index);
 
+function contentDialog(index, result) {
   let dialogContent = document.getElementById("dialog_content");
   dialogContent.innerHTML = `
   <section class="pkmn_card_dialog">
@@ -38,9 +41,7 @@ async function contentDialog(index) {
         <div>
           <h2>#${result.data.id} ${FirstLetter(result.data.name)}</h2>
           <div class="types">
-            ${result.types.map(type => `
-              <span class="${type}">${FirstLetter(type)}</span>
-            `).join("")}
+            ${result.types.map(type => `<span class="${type}">${FirstLetter(type)}</span>`).join("")}
           </div>
           <p class="stat">
             HP: ${result.stats.find(s => s.stat.name === "hp").base_stat}

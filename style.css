@@ -11,6 +11,7 @@
   scroll-behavior: smooth;
   margin: 0;
   font-family: "Roboto Mono", monospace;
+  font-size: 16px;
 }
 
 body {
@@ -57,7 +58,7 @@ header {
 }
 
 h2 {
-  font-size: clamp(0.8rem, calc(0.727rem + 0.455vw), 1rem);
+  font-size: 20px;
   margin-bottom: 10px;
 }
 
@@ -178,7 +179,7 @@ button {
 
 dialog {
   margin: auto auto;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -186,7 +187,6 @@ dialog {
   background-size: 300px;
   background-repeat: no-repeat;
   background-position: center right -60px;
-  width: clamp(300px, calc(227.273px + 22.727vw), 500px);
 }
 
 .close_button {

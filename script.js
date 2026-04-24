@@ -1,12 +1,13 @@
 let PokeData = [];
 let ActualIndex = 0;
 let loadedIndex = 0;
+let currentPokemon = null;
 let spinner = document.getElementById("spinner");
 let typesCache = {};
 let button = document.getElementById("load");
 let contentRef = document.getElementById("content");
-const dialog = document.querySelector("dialog");
-dialog.addEventListener("click", onClick);
+
+// Datenfetch Funktionen
 
 async function init() {
   spinner.classList.remove("hidden");
@@ -20,13 +21,11 @@ async function init() {
 
 async function renderPkmn() {
   contentRef.innerHTML = "";
-
   let promises = [];
   for (let index = 0; index < 20; index++) {
     let name = PokeData.results[index].name;
     promises.push(getTypes(name));
   }
-
   let allTypes = await Promise.all(promises);
   for (let index = 0; index < 20; index++) {
     contentRef.innerHTML += getPokemonTemplate(index, allTypes[index]);
@@ -38,7 +37,6 @@ async function getTypes(name) {
   if (typesCache[name]) {
     return typesCache[name];
   }
-
   let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
   let data = await response.json();
   let types = data.types.map((p) => p.type.name);
@@ -46,11 +44,26 @@ async function getTypes(name) {
   return types;
 }
 
-function fullSize(index) {
+async function fetchDetails(index) {
+  let data = await getPokemonData(index);
+
+  return {
+    data,
+    stats: data.stats,
+    name: data.name,
+    types: data.types.map((t) => t.type.name),
+  };
+}
+
+// Datenfetch Funktionen
+
+async function fullSize(index) {
   ActualIndex = index;
-  contentDialog(index);
   document.getElementById("dialog_wrapper").showModal();
   document.body.classList.add("dialog-open");
+  let result = await fetchDetails(index);
+  currentPokemon = result;
+  contentDialog(index, currentPokemon);
 }
 
 function closeDialog() {
@@ -59,17 +72,28 @@ function closeDialog() {
 }
 
 function filterByName(event) {
+  const input = event.target;
   button.classList.remove("d_none");
   document.getElementById("no_Result")?.remove();
-
-  let searchTerm = event.target.value.trim().toLowerCase();
+  let searchTerm = input.value.trim().toLowerCase();
   let listItems = document.querySelectorAll(".dialog_button");
 
-  if (searchTerm.length < 3) {
-    listItems.forEach((item) => (item.style.display = ""));
-    return;
+  checkValidation(input, searchTerm);
+  if (searchTerm.length >= 3) {
+    filterItems(listItems, searchTerm);
+  } else {
+    listItems.forEach(item => item.style.display = "");
   }
-  filterItems(listItems, searchTerm);
+}
+
+function checkValidation(input, searchTerm){
+  if (searchTerm.length > 0 && searchTerm.length < 3) {
+    input.setCustomValidity("At least 3 characters required");
+    input.reportValidity();
+    return;
+  } else {
+    input.setCustomValidity("");
+  }
 }
 
 function filterItems(listItems, searchTerm) {
@@ -87,23 +111,23 @@ function filterItems(listItems, searchTerm) {
     document.getElementById("no_Result")?.remove();
   } else if (!document.getElementById("no_Result")) {
     button.classList.add("d_none");
-    contentRef.insertAdjacentHTML(
-      "beforeend",
-      `<p id="no_Result">Couldn't find any Pokémon.</p>`
-    );
+    notFoundMessage();
   }
 }
 
-function nextPkmn() {
+async function nextPkmn() {
   ActualIndex++;
-
-  contentDialog(ActualIndex);
+  let result = await fetchDetails(ActualIndex);
+  currentPokemon = result;
+  contentDialog(ActualIndex, currentPokemon);
 }
 
-function prevPkmn() {
-  if (ActualIndex < loadedIndex - 1) {
-    ActualIndex++;
-    contentDialog(ActualIndex);
+async function prevPkmn() {
+  if (ActualIndex > 0) {
+    ActualIndex--;
+    let result = await fetchDetails(ActualIndex);
+    currentPokemon = result;
+    contentDialog(ActualIndex, currentPokemon);
   }
 }
 
@@ -129,16 +153,17 @@ function disableButton() {
   if (loadedIndex >= 140) {
     button.disabled = true;
     button.classList.add("d_none");
-
     return;
   }
 }
 
 function onClick(event) {
   if (event.target === dialog) {
-    dialog.close();
+    closeDialog();
   }
 }
+const dialog = document.querySelector("dialog");
+dialog.addEventListener("click", onClick);
 
 document.addEventListener("keydown", (esc) => {
   if (esc.key === "Escape") {
@@ -157,13 +182,4 @@ function FirstLetter(name) {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
-async function fetchDetails(index) {
-  let data = await getPokemonData(index);
 
-  return {
-    data,
-    stats: data.stats,
-    name: data.name,
-    types: data.types.map((t) => t.type.name),
-  };
-}
